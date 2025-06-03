@@ -21,18 +21,6 @@ namespace Game.Core.Logger.Sinks
             sb.Append(entry.Message);
             return sb.ToString();
         }
-
-        private static void SafeGodotCall(Action godotAction)
-        {
-            if ((int)OS.GetMainThreadId() == Thread.CurrentThread.ManagedThreadId)
-            {
-                godotAction();
-            }
-            else
-            {
-                Callable.From(godotAction).CallDeferred();
-            }
-        }
         #endregion
 
         #region PUBLIC METHODS
@@ -51,29 +39,29 @@ namespace Game.Core.Logger.Sinks
                     break;
                 case ELogLevel.Warning:
                     #if DEBUG || TOOLS
-                    SafeGodotCall(() => GD.PushWarning(formattedMessage));
+                    GD.PushWarning(formattedMessage);
                     bbCodeFormattedMessage = $"[color=yellow]{formattedMessage}[/color]";
                     #endif
                     break;
                 case ELogLevel.Error:
                     #if DEBUG || TOOLS
-                    SafeGodotCall(() => GD.PushError(formattedMessage));
+                    GD.PushError(formattedMessage);
                     bbCodeFormattedMessage = $"[color=red]{formattedMessage}[/color]";
                     #endif
                     break;
                 case ELogLevel.Critical:
                     #if DEBUG || TOOLS
-                    SafeGodotCall(() => GD.PushError(formattedMessage));
+                    GD.PushError(formattedMessage);
                     bbCodeFormattedMessage = $"[color=red]{formattedMessage}[/color]";
                     #endif
                     break;
                 default:
-                    SafeGodotCall(() => GD.PushError($"[CRITICAL] [Logger] Unknown log level encountered: {entry.Level}"));
+                    GD.PushError($"[CRITICAL] [Logger] Unknown log level encountered: {entry.Level}");
                     break;
             }
 
             #if DEBUG || TOOLS
-            SafeGodotCall(() => GD.PrintRich(bbCodeFormattedMessage));
+            GD.PrintRich(bbCodeFormattedMessage);
             #endif
         }
         #endregion
