@@ -104,7 +104,7 @@ namespace Game.Logic
                 Log.Warn("Node \"Test\" not found", ELogCategory.Player);
             }
 
-            // Выводить полный путь до файла (C:/MyProject/Game/Code/Logic/Player.cs)
+            // Выводит полный путь до файла (C:/MyProject/Game/Code/Logic/Player.cs)
             Server.UseShortFilePath = false;
         }
 
